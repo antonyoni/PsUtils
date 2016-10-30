@@ -1,0 +1,23 @@
+<doc>
+	<id>1</id>
+	<path>.\temp\file1.dat</path>
+</doc>
+<doc>
+	<id>2</id>
+	<path>.\temp\file2.dat</path>
+</doc>
+<doc>
+	<id>3</id>
+	<path>.\temp\file3.dat</path>
+</doc>
+<doc>
+	<id>4</id>
+	<path>.\temp\file4.dat</path>
+	<description>testing</description>
+</doc>
+
+
+<doc>
+	<id>5</id>
+	<path>.\temp\file5.dat</path>
+</doc>

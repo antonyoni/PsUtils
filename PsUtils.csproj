@@ -58,6 +58,7 @@
     <Compile Include="KMP.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SplitStreamCmdlet.cs" />
+    <Compile Include="StreamSplitter.cs" />
     <Compile Include="Validation.cs" />
   </ItemGroup>
   <ItemGroup>
