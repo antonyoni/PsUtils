@@ -1,7 +1,6 @@
 ﻿using Microsoft.PowerShell.Commands;
 using PsUtils.Validation;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Management.Automation;
 using Text = System.Text;
@@ -147,12 +146,6 @@ namespace PsUtils {
         protected override void StopProcessing() {
             base.StopProcessing();
         }
-
-        #endregion
-
-        #region Helpers
-
-
 
         #endregion
 
