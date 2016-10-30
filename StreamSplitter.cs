@@ -16,9 +16,13 @@ namespace PsUtils {
         }
 
         public static IEnumerable<byte[]> Split(Stream stream, byte[] delimiter) {
+            return Split(stream, delimiter, defaultBufferSize);
+        }
 
-            MemoryStream ms = new MemoryStream(defaultBufferSize * 2); // DocBuffer
-            var buffer = new byte[defaultBufferSize];
+        public static IEnumerable<byte[]> Split(Stream stream, byte[] delimiter, int bufferSize) {
+
+            MemoryStream ms = new MemoryStream(bufferSize * 2); // DocBuffer
+            var buffer = new byte[bufferSize];
             int readLength = 0;
 
             while ((readLength = stream.Read(buffer, 0, buffer.Length)) > 0) {
@@ -35,7 +39,7 @@ namespace PsUtils {
                     if (ms.Length > 0) {
                         ms.Write(buffer, startPointer, copyLength);
                         doc = ms.ToArray();
-                        ms = new MemoryStream(defaultBufferSize * 2);
+                        ms = new MemoryStream(bufferSize * 2);
                     } else {
                         doc = new byte[copyLength];
                         Array.ConstrainedCopy(buffer, startPointer, doc, 0, copyLength);
