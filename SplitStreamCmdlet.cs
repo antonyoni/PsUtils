@@ -2,6 +2,7 @@
 using PsUtils.Validation;
 using System;
 using System.IO;
+using System.Linq;
 using System.Management.Automation;
 using Text = System.Text;
 
@@ -87,11 +88,15 @@ namespace PsUtils {
 
             // Discard encoding preamble
             var encPreamble = encoding.GetPreamble();
-            if (encPreamble != null) {
+            if (encoding is Text.UTF8Encoding) {
+                // by default utf8 without bom, check regardless
+                encPreamble = Text.Encoding.UTF8.GetPreamble();
+            }
+            if (encPreamble.Length > 0) {
                 var paLen = encPreamble.Length;
                 var paBuf = new byte[paLen];
                 stream.Read(paBuf, 0, paLen);
-                if (Array.Equals(encPreamble, paBuf)) {
+                if (encPreamble.SequenceEqual(paBuf)) {
                     WriteWarning(String.Format("BOM found ({0}) bytes). It will be ignored.", paLen));
                 } else {
                     stream.Seek(0, SeekOrigin.Begin);
