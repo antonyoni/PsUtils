@@ -10,7 +10,7 @@ namespace PsUtils {
 
     [Cmdlet(VerbsCommon.Split, "Stream",
             DefaultParameterSetName = "Stream")]
-    [OutputType(typeof(PSObject))]
+    [OutputType(typeof(byte[]))]
     public class SplitStreamCmdlet : Cmdlet {
 
         #region Parameters
