@@ -12,6 +12,7 @@ namespace PsUtils.Tests {
         private string filePath2 = "..\\..\\Data\\file1_nonewline.txt";
         private string filePath3 = "..\\..\\Data\\file2.txt";
 
+        [TestCategory("StreamSplitter")]
         [TestMethod()]
         public void SplitTest_DefaultDelimiter_File1() {
             using (var stream = new FileStream(filePath1, FileMode.Open)) {
@@ -20,6 +21,7 @@ namespace PsUtils.Tests {
             }
         }
 
+        [TestCategory("StreamSplitter")]
         [TestMethod()]
         public void SplitTest_DefaultDelimiter_File2() {
 
@@ -30,6 +32,7 @@ namespace PsUtils.Tests {
             }
         }
 
+        [TestCategory("StreamSplitter")]
         [TestMethod()]
         public void SplitTest_CustomDelimiter_File3() {
             using (var stream = new FileStream(filePath3, FileMode.Open)) {
@@ -41,6 +44,7 @@ namespace PsUtils.Tests {
             }
         }
 
+        [TestCategory("StreamSplitter")]
         [TestMethod()]
         public void SplitTest_DelimiterDoesNotExist_File3() {
             using (var stream = new FileStream(filePath3, FileMode.Open)) {
