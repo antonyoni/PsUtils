@@ -6,6 +6,9 @@ namespace PsUtils.Tests {
     [TestClass()]
     public class KMPTests {
 
+        #region NewFailureFunction
+
+        [TestCategory("NewFailureFunction")]
         [TestMethod()]
         public void NewFailureFunction_ShortString_ReturnsValidTable() {
 
@@ -22,6 +25,7 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("NewFailureFunction")]
         [TestMethod()]
         public void NewFailureFunction_LongString_ReturnsValidTable() {
 
@@ -37,8 +41,111 @@ namespace PsUtils.Tests {
 
         }
 
+        #endregion
+
+        #region Find
+
+        [TestCategory("Find")]
         [TestMethod()]
-        public void Find_BytePattern_SingleInstance() {
+        public void Find_BytePattern() {
+
+            string input = "ABCDABD";
+            string pattern = "CDA";
+
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var patternBytes = Encoding.ASCII.GetBytes(pattern);
+
+            var found = KMP.Find(inputBytes, patternBytes);
+
+            Assert.AreEqual(2, found);
+
+        }
+
+        [TestCategory("Find")]
+        [TestMethod()]
+        public void Find_StringPattern() {
+
+            string input = "ABCDABD";
+            string pattern = "BCD";
+
+            var found = KMP.Find(input, pattern);
+
+            Assert.AreEqual(1, found);
+
+        }
+
+        [TestCategory("Find")]
+        [TestMethod()]
+        public void Find_StringPattern_MultiByteEncoding() {
+
+            string input = "ABCDABD";
+            string pattern = "DAB";
+
+            var found = KMP.Find(input, pattern, Encoding.Unicode);
+
+            Assert.AreEqual(3, found);
+
+        }
+
+        [TestCategory("Find")]
+        [TestMethod()]
+        public void Find_StringPattern_SingleCharacter() {
+
+            string input = "AAABBAA";
+            string pattern = "B";
+
+            var found = KMP.Find(input, pattern);
+
+            Assert.AreEqual(3, found);
+
+        }
+
+        [TestCategory("Find")]
+        [TestMethod()]
+        public void Find_StringPattern_FirstCharacter() {
+
+            string input = "AAABBAA";
+            string pattern = "A";
+
+            var found = KMP.Find(input, pattern);
+
+            Assert.AreEqual(0, found);
+
+        }
+
+        [TestCategory("Find")]
+        [TestMethod()]
+        public void Find_StringPattern_LastCharacter() {
+
+            string input = "AAABBAAD";
+            string pattern = "D";
+
+            var found = KMP.Find(input, pattern);
+
+            Assert.AreEqual(input.Length - 1, found);
+
+        }
+
+        [TestCategory("Find")]
+        [TestMethod()]
+        public void Find_StringPattern_DoesNotExist() {
+
+            string input = "AAABBAAD";
+            string pattern = "BBD";
+
+            var found = KMP.Find(input, pattern);
+
+            Assert.AreEqual(-1, found);
+
+        }
+
+        #endregion
+
+        #region FindAll
+
+        [TestCategory("FindAll")]
+        [TestMethod()]
+        public void FindAll_BytePattern_SingleInstance() {
 
             string input = "ABCDABD";
             string pattern = "CDA";
@@ -53,8 +160,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_SingleInstance() {
+        public void FindAll_StringPattern_SingleInstance() {
 
             string input = "ABCDABD";
             string pattern = "CDA";
@@ -66,8 +174,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_SingleInstance_MultiByteEncoding() {
+        public void FindAll_StringPattern_SingleInstance_MultiByteEncoding() {
 
             string input = "ABCDABD";
             string pattern = "CDA";
@@ -79,8 +188,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_MultipleInstances() {
+        public void FindAll_StringPattern_MultipleInstances() {
 
             string input = "AABAACAADAABAAABAA";
             string pattern = "AABA";
@@ -92,8 +202,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_SingleCharacter() {
+        public void FindAll_StringPattern_SingleCharacter() {
 
             string input = "AAABAAA";
             string pattern = "A";
@@ -105,8 +216,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_SingleCharacter_MultiByteEncoding() {
+        public void FindAll_StringPattern_SingleCharacter_MultiByteEncoding() {
 
             string input = "AAABAAA";
             string pattern = "A";
@@ -118,8 +230,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_TwoCharacters() {
+        public void FindAll_StringPattern_TwoCharacters() {
 
             string input = "AAABAAA";
             string pattern = "AA";
@@ -131,8 +244,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_TwoCharacters_MultiByteEncoding() {
+        public void FindAll_StringPattern_TwoCharacters_MultiByteEncoding() {
 
             string input = "AAABAAA";
             string pattern = "AA";
@@ -144,8 +258,9 @@ namespace PsUtils.Tests {
 
         }
 
+        [TestCategory("FindAll")]
         [TestMethod()]
-        public void Find_StringPattern_TwoCharacters2() {
+        public void FindAll_StringPattern_TwoCharacters2() {
 
             string input = "AAAABAAAA";
             string pattern = "AA";
@@ -156,6 +271,8 @@ namespace PsUtils.Tests {
             CollectionAssert.AreEqual(shouldFind, found);
 
         }
+
+        #endregion
 
     }
 

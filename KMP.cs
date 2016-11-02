@@ -5,6 +5,8 @@ namespace PsUtils {
 
     public class KMP {
 
+        #region Helpers
+
         /// <summary>
         /// Creates a lookup for partial matches, also known as a failure function.
         /// </summary>
@@ -40,6 +42,71 @@ namespace PsUtils {
             return table;
         }
 
+        #endregion
+
+        #region First occurence
+
+        /// <summary>
+        /// Uses the Knuth-Morris-Pratt algorithm to find the first instance of pattern in input.
+        /// </summary>
+        /// <param name="input">Byte array to search.</param>
+        /// <param name="pattern">Byte array to find in <paramref name="input"/>.</param>
+        /// <returns>The index of the start of the match in <paramref name="input"/>. -1 if nothing found.</returns>
+        public static int Find(byte[] input, byte[] pattern) {
+
+            int[] table = NewFailureFunction(pattern);
+
+            int posMatch = 0;
+            int posChar  = 0;
+
+            while (posMatch + posChar < input.Length) {
+                if (pattern[posChar] == input[posMatch + posChar]) {
+                    if (posChar == pattern.Length - 1) {
+                        return posMatch; // Found first instance
+                    } else {
+                        ++posChar;
+                    }
+                } else {
+                    if (table[posChar] > -1) {
+                        posMatch += posChar - table[posChar];
+                        posChar = table[posChar];
+                    } else {
+                        ++posMatch;
+                        posChar = 0;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// Uses the Knuth-Morris-Pratt algorithm to find the first instance of pattern in input. Uses a default encoding of <see cref="Encoding.UTF8"/> to convert the strings to byte arrays.
+        /// </summary>
+        /// <param name="input">String to search.</param>
+        /// <param name="pattern">String to find in <paramref name="input"/>.</param>
+        /// <returns>The index of the start of the match in <paramref name="input"/>. -1 if nothing found.</returns>
+        public static int Find(string input, string pattern) {
+            return Find(input, pattern, Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Uses the Knuth-Morris-Pratt algorithm to find the first instance of pattern in input.
+        /// </summary>
+        /// <param name="input">String to search.</param>
+        /// <param name="pattern">String to find in <paramref name="input"/>.</param>
+        /// <param name="encoding">The encoding to use to convert the input and pattern into a byte array.</param>
+        /// <returns>The index of the start of the match in <paramref name="input"/>. -1 if nothing found.</returns>
+        public static int Find(string input, string pattern, Encoding encoding) {
+            var div = encoding.GetByteCount(pattern) / pattern.Length;
+            var found = Find(encoding.GetBytes(input), encoding.GetBytes(pattern));
+            return found / div;
+        }
+
+        #endregion
+
+        #region All occurences
+
         /// <summary>
         /// Uses the Knuth-Morris-Pratt algorithm to find all occurences of pattern in input.
         /// </summary>
@@ -51,7 +118,6 @@ namespace PsUtils {
 
             List<int> found = new List<int>();
             int[] table = NewFailureFunction(pattern);
-
 
             int posMatch = 0;
             int posChar  = 0;
@@ -105,6 +171,8 @@ namespace PsUtils {
             }
             return found;
         }
+
+        #endregion
 
     }
 
