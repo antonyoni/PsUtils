@@ -70,7 +70,9 @@
       <Name>PsUtils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Split-Stream.Tests.ps1" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Data\file1.txt" />
     <Content Include="Data\file2.txt" />
