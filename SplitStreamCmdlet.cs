@@ -97,7 +97,7 @@ namespace PsUtils {
                 var paBuf = new byte[paLen];
                 stream.Read(paBuf, 0, paLen);
                 if (encPreamble.SequenceEqual(paBuf)) {
-                    WriteWarning(String.Format("BOM found ({0}) bytes). It will be ignored.", paLen));
+                    WriteWarning(String.Format("BOM found ({0} bytes). It will be ignored.", paLen));
                 } else {
                     stream.Seek(0, SeekOrigin.Begin);
                 }
