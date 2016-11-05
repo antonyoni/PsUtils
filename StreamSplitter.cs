@@ -25,14 +25,45 @@ namespace PsUtils {
             var buffer = new byte[bufferSize];
             int readLength = 0;
 
+#if DEBUG
+            var bufStr = "";
+            var msStr = "";
+#endif
+
             while ((readLength = stream.Read(buffer, 0, buffer.Length)) > 0) {
 
                 var splitEnds = KMP.FindAll(buffer, delimiter);
+
+#if DEBUG
+                bufStr = Encoding.UTF8.GetString(buffer);
+                msStr = Encoding.UTF8.GetString(ms.ToArray());
+#endif
+
+                if (ms.Length > 0 && delimiter.Length > 1) {
+                    var searchBuffer = new byte[delimiter.Length * 2 - 2];
+                    int end;
+                    if (delimiter.Length - 1 <= ms.Length) {
+                        end = delimiter.Length - 1;
+                    } else {
+                        end = (int)ms.Length;
+                    }
+                    ms.Seek(-end, SeekOrigin.Current);
+                    ms.Read(searchBuffer, 0, end);
+                    Array.Copy(buffer, 0, searchBuffer, end, end);
+                    var found = KMP.Find(searchBuffer, delimiter);
+                    if (found > -1) {
+                        var newSplitEnds = new int[splitEnds.Length + 1];
+                        newSplitEnds[0] = found - end;
+                        Array.Copy(splitEnds, 0, newSplitEnds, 1, splitEnds.Length);
+                        splitEnds = newSplitEnds;
+                    }
+                }
+
                 var startPointer = 0;
 
                 for (int i = 0; i < splitEnds.Length; i++) {
                     var endPointer = splitEnds[i];
-                    if (endPointer > readLength)
+                    if (endPointer >= readLength)
                         break;
                     var copyLength = endPointer - startPointer + delimiter.Length;
                     byte[] doc;
@@ -42,8 +73,11 @@ namespace PsUtils {
                         ms = new MemoryStream(bufferSize * 2);
                     } else {
                         doc = new byte[copyLength];
-                        Array.ConstrainedCopy(buffer, startPointer, doc, 0, copyLength);
+                        Array.Copy(buffer, startPointer, doc, 0, copyLength);
                     }
+#if DEBUG
+                    var docStr = Encoding.UTF8.GetString(doc);
+#endif
                     yield return doc;
                     startPointer = endPointer + delimiter.Length;
                 }

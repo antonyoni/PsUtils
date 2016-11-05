@@ -12,6 +12,7 @@ namespace PsUtils.Tests {
         private string filePath1 = "..\\..\\Data\\file1.txt";
         private string filePath2 = "..\\..\\Data\\file1_nonewline.txt";
         private string filePath3 = "..\\..\\Data\\file2.txt";
+        private string filePath4 = "..\\..\\Data\\file3.txt";
 
         [TestCategory("StreamSplitter")]
         [TestMethod()]
@@ -83,6 +84,45 @@ namespace PsUtils.Tests {
                     join.AddRange(s);
                 }
                 Assert.AreEqual(stream.Length, join.ToArray().Length);
+            }
+
+        }
+
+        [TestCategory("StreamSplitter")]
+        [TestMethod()]
+        public void SplitTest_SplitDelimiter_File4() {
+
+            var delimiter = Encoding.ASCII.GetBytes("\r\n");
+
+            using (var stream = new FileStream(filePath4, FileMode.Open)) {
+                var split = StreamSplitter.Split(stream, delimiter, 3);
+                Assert.AreEqual(10, split.Count());
+            }
+
+        }
+
+        [TestCategory("StreamSplitter")]
+        [TestMethod()]
+        public void SplitTest_SplitDelimiter_SingleChar_File4() {
+
+            var delimiter = Encoding.ASCII.GetBytes("\n");
+
+            using (var stream = new FileStream(filePath4, FileMode.Open)) {
+                var split = StreamSplitter.Split(stream, delimiter, 3);
+                Assert.AreEqual(10, split.Count());
+            }
+
+        }
+
+        [TestCategory("StreamSplitter")]
+        [TestMethod()]
+        public void SplitTest_SplitDelimiter_CustomBuffer_File4() {
+
+            var delimiter = Encoding.ASCII.GetBytes("\n\r");
+
+            using (var stream = new FileStream(filePath4, FileMode.Open)) {
+                var split = StreamSplitter.Split(stream, delimiter, 3);
+                Assert.AreEqual(10, split.Count());
             }
 
         }
