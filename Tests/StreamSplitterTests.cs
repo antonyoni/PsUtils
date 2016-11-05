@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -36,9 +37,9 @@ namespace PsUtils.Tests {
         [TestMethod()]
         public void SplitTest_CustomDelimiter_File3() {
             using (var stream = new FileStream(filePath3, FileMode.Open)) {
-                var delimeter = Encoding.UTF8.GetBytes("</doc>");
+                var delimiter = Encoding.UTF8.GetBytes("</doc>");
 
-                var split = StreamSplitter.Split(stream, delimeter);
+                var split = StreamSplitter.Split(stream, delimiter);
 
                 Assert.AreEqual(5, split.Count());
             }
@@ -54,6 +55,36 @@ namespace PsUtils.Tests {
 
                 Assert.AreEqual(1, split.Count());
             }
+        }
+
+        [TestCategory("StreamSplitter")]
+        [TestMethod()]
+        public void SplitTest_OutputSameLength_File1() {
+            using (var stream = new FileStream(filePath1, FileMode.Open)) {
+                var split = StreamSplitter.Split(stream);
+                var join  = new List<byte>();
+                foreach (var s in split) {
+                    join.AddRange(s);
+                }
+                Assert.AreEqual(stream.Length, join.ToArray().Length);
+            }
+        }
+
+        [TestCategory("StreamSplitter")]
+        [TestMethod()]
+        public void SplitTest_OutputSameLength_CustomDelimiter_File3() {
+
+            var delimiter = Encoding.UTF8.GetBytes("</doc>");
+
+            using (var stream = new FileStream(filePath3, FileMode.Open)) {
+                var split = StreamSplitter.Split(stream, delimiter, 128);
+                var join  = new List<byte>();
+                foreach (var s in split) {
+                    join.AddRange(s);
+                }
+                Assert.AreEqual(stream.Length, join.ToArray().Length);
+            }
+
         }
 
     }
